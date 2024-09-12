@@ -30,24 +30,28 @@ local convertToImage = clip.clip_lock_is_convertible(lock, imageFormat)
 print()
 print('clip_lock_is_convertible image', convertToImage)
 if convertToImage then
-	local image = ffi.new'ClipImage[1]'
+	local image = clip.clip_image_new()
 	print('sizeof image', ffi.sizeof(image))
-	print('clip_lock_get_image', clip.clip_lock_get_image(lock, image))
-	print('image', image)
-	local spec = clip.clip_image_spec(image)
-	print('spec', spec)
-	print('	width', spec.width)
-	print('	height', spec.height)
-	print('	bits_per_pixel', spec.bits_per_pixel)
-	print('	bytes_per_row', spec.bytes_per_row)
-	print('	red_mask', spec.red_mask)
-	print('	green_mask', spec.green_mask)
-	print('	blue_mask', spec.blue_mask)
-	print('	alpha_mask', spec.alpha_mask)
-	print('	red_shift', spec.red_shift)
-	print('	green_shift', spec.green_shift)
-	print('	blue_shift', spec.blue_shift)
-	print('	alpha_shift', spec.alpha_shift)
+	local result = clip.clip_lock_get_image(lock, image) 
+	if result then
+	print('clip_lock_get_image', result)
+		print('image', image)
+		local spec = clip.clip_image_spec(image)
+		print('spec', spec)
+		print('	width', spec.width)
+		print('	height', spec.height)
+		print('	bits_per_pixel', spec.bits_per_pixel)
+		print('	bytes_per_row', spec.bytes_per_row)
+		print('	red_mask', spec.red_mask)
+		print('	green_mask', spec.green_mask)
+		print('	blue_mask', spec.blue_mask)
+		print('	alpha_mask', spec.alpha_mask)
+		print('	red_shift', spec.red_shift)
+		print('	green_shift', spec.green_shift)
+		print('	blue_shift', spec.blue_shift)
+		print('	alpha_shift', spec.alpha_shift)
+	end
+	clip.clip_image_free(image)
 end
 clip.clip_lock_free(lock)
 --]]
@@ -61,4 +65,16 @@ if clip.clip_get_text(nil, len) then	-- weird, lock's get_len returns with the \
 	local str = ffi.new('char[?]', len[0]+1)
 	assert(clip.clip_get_text(str, len))
 	print('clip_get_text', tolua(ffi.string(str, len[0])))
+end
+
+print'high level:'
+print('clip.text:', require 'clip'.text())
+print('clip.image:', require 'clip'.image())
+print('clip.get:', require 'clip'.get())
+local image = require 'clip'.image()
+if image then 
+	print('image width', image.width)
+	print('image height', image.height)
+	print('image channels', image.channels)
+	image:save'clip.png' 
 end

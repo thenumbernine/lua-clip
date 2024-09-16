@@ -11,16 +11,29 @@ local errorHandler = function(err)
 end
 
 local textFormat = clip.clip_text_format()
-local function text()
+local function text(...)
 	local result
 	local lock = clip.clip_lock_new()
+	local iscopying = select('#', ...) > 0
+	local tocopy = ...
 	assert(xpcall(function()
-		if clip.clip_lock_is_convertible(lock, textFormat) then
-			local len = clip.clip_lock_get_data_length(lock, textFormat)
-			local data = ffi.new('char[?]', len)
-			if clip.clip_lock_get_data(lock, textFormat, data, len) then
-				result = ffi.string(data, len)
-			end	
+		if iscopying then 	-- setting clipboard
+			tocopy = tostring(tocopy)
+			-- TODO do we need null term?
+			assert(clip.clip_lock_clear(lock))
+			assert(clip.clip_lock_set_data(lock, textFormat, ffi.cast('char const*', tocopy), #tocopy))
+		else	-- returning clipboard
+			if clip.clip_lock_is_convertible(lock, textFormat) then
+				local len = clip.clip_lock_get_data_length(lock, textFormat)
+				local data = ffi.new('char[?]', len)
+				if clip.clip_lock_get_data(lock, textFormat, data, len) then
+					-- ok so the libclip test_text says that you should expect a \0 in the trailing output
+					-- likewise I copied/pasted the same string apart from libclip and it did look the same
+					-- so here's me removing it if it is present
+					if len>0 and data[len-1] == 0 then len = len - 1 end
+					result = ffi.string(data, len)
+				end	
+			end
 		end
 	end, errorHandler))
 	clip.clip_lock_free(lock)	-- TODO this in a 'finally'

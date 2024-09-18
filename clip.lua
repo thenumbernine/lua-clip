@@ -33,7 +33,7 @@ local function text(...)
 					-- so here's me removing it if it is present
 					if len>0 and data[len-1] == 0 then len = len - 1 end
 					result = ffi.string(data, len)
-				end	
+				end
 			end
 		end
 	end, errorHandler))
@@ -58,7 +58,21 @@ local function image(...)
 				tocopy = tocopy:combine(table{blank}:rep(4 - tocopy.channels):unpack())
 			end
 			asserteq(tocopy.channels, 4, 'channels')
-			assert(clip.clip_lock_set_data(lock, imageFormat, tocopy.buffer, tocopy.width*tocopy.height*tocopy.channels), "clipboard set image failed")
+			local spec = ffi.new'ClipImageSpec[1]'
+			spec[0].width = tocopy.width
+			spec[0].height = tocopy.height
+			spec[0].bits_per_pixel = bit.lshift(tocopy.channels, 3) * ffi.sizeof(tocopy.format)
+			spec[0].bytes_per_row = tocopy.width * tocopy.channels * ffi.sizeof(tocopy.format)
+			spec[0].red_mask = 0xff
+			spec[0].green_mask = 0xff00
+			spec[0].blue_mask = 0xff0000
+			spec[0].alpha_mask = 0xff000000
+			spec[0].red_shift = 0
+			spec[0].green_shift = 8
+			spec[0].blue_shift = 16
+			spec[0].alpha_shift = 24
+			local clipImage = clip.clip_image_new_pp(tocopy.buffer, spec)
+			assert(clip.clip_lock_set_image(lock, clipImage))
 		else
 			if clip.clip_lock_is_convertible(lock, imageFormat) then
 				local clipImage = clip.clip_image_new()

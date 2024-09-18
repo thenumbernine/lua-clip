@@ -1,5 +1,6 @@
 local ffi = require 'ffi'
 local clip = require 'ffi.req' 'cclip'
+local table = require 'ext.table'
 local asserteq = require 'ext.assert'.eq
 local assertne = require 'ext.assert'.ne
 local Image = require 'image'
@@ -53,11 +54,11 @@ local function image(...)
 			asserteq(ffi.sizeof(tocopy.format), 1, 'image.format')	-- ... right?
 			-- can only handle 32bpp images soooo ...
 			if tocopy.channels < 4 then
-				local blank = Image(tocopy.width, tocopy.height, 1, tocopy.format)
+				local blank = Image(tocopy.width, tocopy.height, 1, tocopy.format):clear()	-- WARNING this will give you transparent alpha ...
 				tocopy = tocopy:combine(table{blank}:rep(4 - tocopy.channels):unpack())
 			end
 			asserteq(tocopy.channels, 4, 'channels')
-			assert(clip.clip_lock_set_data(lock, imageFormat, tocopy.buffer, tocopy.width*tocopy.height*tocopy.channels*ffi.sizeof(tocopy.format)), "clipboard set image failed")
+			assert(clip.clip_lock_set_data(lock, imageFormat, tocopy.buffer, tocopy.width*tocopy.height*tocopy.channels), "clipboard set image failed")
 		else
 			if clip.clip_lock_is_convertible(lock, imageFormat) then
 				local clipImage = clip.clip_image_new()

@@ -2,7 +2,7 @@
 local ffi = require 'ffi'
 local table = require 'ext.table'
 local tolua = require 'ext.tolua'
-local asserteq = require 'ext.assert'.eq
+local assert = require 'ext.assert'
 local clip = require 'ffi.req' 'cclip'
 
 local textFormat = clip.clip_text_format()
@@ -92,5 +92,5 @@ do
 	print('copying got', tolua(got))
 	local got = table.pack(Clip.text())
 	print('pasting got', tolua(got))
-	asserteq(s, got[1])
+	assert.eq(s, got[1])
 end

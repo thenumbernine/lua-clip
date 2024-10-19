@@ -1,8 +1,7 @@
 local ffi = require 'ffi'
 local clip = require 'ffi.req' 'cclip'
 local table = require 'ext.table'
-local asserteq = require 'ext.assert'.eq
-local assertne = require 'ext.assert'.ne
+local assert = require 'ext.assert'
 local Image = require 'image'
 
 -- TODO this should be a default argument in xpcall
@@ -51,13 +50,13 @@ local function image(...)
 		if copying then
 			assert(Image:isa(tocopy), "can't paste image, it's not an image")
 			assert(clip.clip_lock_clear(lock), "clipboard clear failed")
-			asserteq(ffi.sizeof(tocopy.format), 1, 'image.format')	-- ... right?
+			assert.eq(ffi.sizeof(tocopy.format), 1, 'image.format')	-- ... right?
 			-- can only handle 32bpp images soooo ...
 			if tocopy.channels < 4 then
 				local blank = Image(tocopy.width, tocopy.height, 1, tocopy.format):clear()	-- WARNING this will give you transparent alpha ...
 				tocopy = tocopy:combine(table{blank}:rep(4 - tocopy.channels):unpack())
 			end
-			asserteq(tocopy.channels, 4, 'channels')
+			assert.eq(tocopy.channels, 4, 'channels')
 			local spec = ffi.new'ClipImageSpec[1]'
 			spec[0].width = tocopy.width
 			spec[0].height = tocopy.height
@@ -78,12 +77,12 @@ local function image(...)
 				local clipImage = clip.clip_image_new()
 				if clip.clip_lock_get_image(lock, clipImage) then
 					local spec = clip.clip_image_spec(clipImage)
-					asserteq(spec.bits_per_pixel, 32, 'clipboard bpp')
+					assert.eq(spec.bits_per_pixel, 32, 'clipboard bpp')
 					result = Image(tonumber(spec.width), tonumber(spec.height), tonumber(bit.rshift(spec.bits_per_pixel, 3)), 'unsigned char')
 					local dstRowSize = result.width * result.channels
 					local dstp = clip.clip_image_data(clipImage)
 					local srcp = result.buffer
-					assertne(dstp, nil, 'dstp')
+					assert.ne(dstp, nil, 'dstp')
 					for y=0,result.height-1 do
 						ffi.copy(srcp, dstp, dstRowSize)
 						srcp = srcp + dstRowSize

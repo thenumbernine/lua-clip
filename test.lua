@@ -35,10 +35,28 @@ do
 	if convertToImage then
 		local image = clip.clip_image_new()
 		print('sizeof image', ffi.sizeof(image))
-		local result = clip.clip_lock_get_image(lock, image) 
+		print('image', image)
+		-- [[ can I do this before locking the image, since locking the image crashes it?
+		-- no, you can't do this, it gives back 0's.
+		local spec = clip.clip_image_spec(image)
+		print('spec', spec)
+		print('	width', spec.width)
+		print('	height', spec.height)
+		print('	bits_per_pixel', spec.bits_per_pixel)
+		print('	bytes_per_row', spec.bytes_per_row)
+		print('	red_mask', spec.red_mask)
+		print('	green_mask', spec.green_mask)
+		print('	blue_mask', spec.blue_mask)
+		print('	alpha_mask', spec.alpha_mask)
+		print('	red_shift', spec.red_shift)
+		print('	green_shift', spec.green_shift)
+		print('	blue_shift', spec.blue_shift)
+		print('	alpha_shift', spec.alpha_shift)
+		--]]
+
+		local result = clip.clip_lock_get_image(lock, image)
 		if result then
-		print('clip_lock_get_image', result)
-			print('image', image)
+			print('clip_lock_get_image', result)
 			local spec = clip.clip_image_spec(image)
 			print('spec', spec)
 			print('	width', spec.width)
@@ -77,11 +95,11 @@ print('clip.text:', Clip.text())
 print('clip.image:', Clip.image())
 print('clip.get:', Clip.get())
 local image = Clip.image()
-if image then 
+if image then
 	print('image width', image.width)
 	print('image height', image.height)
 	print('image channels', image.channels)
-	image:save'clip.png' 
+	image:save'clip.png'
 end
 
 -- test copying

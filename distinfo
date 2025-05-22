@@ -1,0 +1,13 @@
+name = "clip"
+files = {
+	["README.md"] = "clip/README.md",
+	["clip.lua"] = "clip/clip.lua",
+	["copy.lua"] = "clip/copy.lua",
+	["paste.lua"] = "clip/paste.lua",
+	["test.lua"] = "clip/test.lua",
+}
+deps = {
+	"ext",
+	"ffi",
+	"image",
+}

@@ -1,5 +1,5 @@
 local ffi = require 'ffi'
-local clip = require 'ffi.req' 'cclip'
+local clip = require 'clip.ffi'
 local table = require 'ext.table'
 local assert = require 'ext.assert'
 local Image = require 'image'

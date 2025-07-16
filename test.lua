@@ -3,7 +3,7 @@ local ffi = require 'ffi'
 local table = require 'ext.table'
 local tolua = require 'ext.tolua'
 local assert = require 'ext.assert'
-local clip = require 'ffi.req' 'cclip'
+local clip = require 'clip.ffi'
 
 local textFormat = clip.clip_text_format()
 print('clip_text_format', textFormat)

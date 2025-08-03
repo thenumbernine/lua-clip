@@ -3,8 +3,12 @@ files = {
 	["README.md"] = "clip/README.md",
 	["clip.lua"] = "clip/clip.lua",
 	["copy.lua"] = "clip/copy.lua",
+	["ffi.lua"] = "clip/ffi.lua",
 	["paste.lua"] = "clip/paste.lua",
+	["pasteimage.lua"] = "clip/pasteimage.lua",
+	["sdl.lua"] = "clip/sdl.lua",
 	["test.lua"] = "clip/test.lua",
+	["test_sdl.lua"] = "clip/test_sdl.lua",
 }
 deps = {
 	"ext",

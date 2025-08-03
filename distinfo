@@ -17,13 +17,14 @@ deps = {
 	"image",
 }
 
--- put this in distinfo so that dependency-traversal can be used to substitute #include's with ffi.req's
+-- Put this in distinfo so that dependency-traversal can be used to substitute #include's with ffi.req's.
+-- I could put it in its own file so that distinfo autogen doesn't delete it, meh...
 generateBindings = {
 	inc = '<cclip.h>',
 	out = 'ffi.lua',	-- replace any `#include <cclip.h>`'s with `]] require 'clip.ffi' ffi.cdef[[` ...
 	final = function(code)
 		code = code .. '\n'
-			.."return require 'ffi.load' 'clip'\n"
+			.."return require 'ffi.load' 'clip'\n"	-- clip.dll, libclip.so, libclip.dylib
 		return code
 	end,
 }

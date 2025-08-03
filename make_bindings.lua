@@ -12,6 +12,8 @@ I need a good standardized way for this to search all other generated headers ..
 
 TODO still in the works, the best way to get bindings is still running this within the include/include-list.lua and copying it into this folder.
 The big hurdle is in searching all prior include-generations and replacing their generated content with ffi.req statements.
+
+TODO don't use this, use distinfo's generateBindings instead, and work in distinfo deps traversal into the generator for replacing includes with requires
 --]]
 local out = 'ffi.lua'	-- local filename to write to, so it can be required with "require 'clip.ffi'"
 local libname = 'clip'	-- clip.dll, libclip.so, libclip.dylib

@@ -10,8 +10,20 @@ files = {
 	["test.lua"] = "clip/test.lua",
 	["test_sdl.lua"] = "clip/test_sdl.lua",
 }
+
 deps = {
 	"ext",
 	"ffi",
 	"image",
+}
+
+-- put this in distinfo so that dependency-traversal can be used to substitute #include's with ffi.req's
+generateBindings = {
+	inc = '<cclip.h>',
+	out = 'ffi.lua',	-- replace any `#include <cclip.h>`'s with `]] require 'clip.ffi' ffi.cdef[[` ...
+	final = function(code)
+		code = code .. '\n'
+			.."return require 'ffi.load' 'clip'\n"
+		return code
+	end,
 }

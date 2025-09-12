@@ -29,7 +29,7 @@ local function image(...)
 	local numMimeTypes = ffi.new'size_t[1]'
 	local mimeTypesCstr = sdlAssertNonNull(sdl.SDL_GetClipboardMimeTypes(numMimeTypes))
 	local mimeTypes = table()
-	for i=0,tonumber(numMimeTypes[0]-1) do
+	for i=0,tonumber(numMimeTypes[0])-1 do
 		local mt = ffi.string(mimeTypesCstr[i])
 print('has mime type', mt)		
 		mimeTypes[mt] = true

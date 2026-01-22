@@ -1,8 +1,12 @@
 local ffi = require 'ffi'
-local clip = require 'clip.ffi'
 local table = require 'ext.table'
 local assert = require 'ext.assert'
 local Image = require 'image'
+local clip =
+--	ffi.os == 'Linux'
+--	and require 'clip.ffi.Linux'
+--	or
+	require 'clip.ffi'
 
 -- TODO this should be a default argument in xpcall
 -- just like the 'err' object being thrown shouldn't append its source:line info, instead that should only be on the stacktrace.

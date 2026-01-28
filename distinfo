@@ -1,20 +1,41 @@
+--------------------------------------------
+-- generated with dist/build-distinfo.rua --
+--------------------------------------------
+
 name = "clip"
 files = {
-	["README.md"] = "clip/README.md",
-	["clip.lua"] = "clip/clip.lua",
-	["copy.lua"] = "clip/copy.lua",
-	["ffi.lua"] = "clip/ffi.lua",
-	["paste.lua"] = "clip/paste.lua",
-	["pasteimage.lua"] = "clip/pasteimage.lua",
-	["sdl.lua"] = "clip/sdl.lua",
-	["test.lua"] = "clip/test.lua",
-	["test_sdl.lua"] = "clip/test_sdl.lua",
+	"README.md",
+	"clip.lua",
+	"copy.lua",
+	"distinfo",
+	"ffi.lua",
+	"ffi/Linux.lua",
+	"paste.lua",
+	"pasteimage.lua",
+	"sdl.lua",
+	"test.lua",
+	"test_sdl.lua",
 }
-
+if ffi.os == "Linux" and ffi.arch == "x64" then
+	table.append(files, {
+		"bin/Linux/x64/libclip.so",
+	})
+end
+if ffi.os == "OSX" and ffi.arch == "x64" then
+	table.append(files, {
+		"bin/OSX/x64/libclip.dylib",
+	})
+end
+if ffi.os == "Windows" and ffi.arch == "x64" then
+	table.append(files, {
+		"bin/Windows/x64/clip.dll",
+	})
+end
 deps = {
 	"ext",
 	"ffi",
 	"image",
+	--"sdl",	-- tests only
 }
 
 -- Put this in distinfo so that dependency-traversal can be used to substitute #include's with ffi.req's.

@@ -74,7 +74,7 @@ local ffi = require 'ffi'
 local table = require 'ext.table'
 local xcb = require 'xcb'	-- TODO?
 require 'ffi.req' 'c.stdlib'	-- free()
-local vector = require 'ffi.cpp.vector'
+local vector = require 'stl.vector'
 
 local CLIP_SUPPORT_SAVE_TARGETS = true
 local vector_xcb_atom_t = vector'xcb_atom_t'

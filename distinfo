@@ -16,17 +16,17 @@ files = {
 	"test.lua",
 	"test_sdl.lua",
 }
-if ffi.os == "Linux" and ffi.arch == "x64" then
+if targetOS == "Linux" and targetArch == "x64" then
 	table.append(files, {
 		"bin/Linux/x64/libclip.so",
 	})
 end
-if ffi.os == "OSX" and ffi.arch == "x64" then
+if targetOS == "OSX" and targetArch == "x64" then
 	table.append(files, {
 		"bin/OSX/x64/libclip.dylib",
 	})
 end
-if ffi.os == "Windows" and ffi.arch == "x64" then
+if targetOS == "Windows" and targetArch == "x64" then
 	table.append(files, {
 		"bin/Windows/x64/clip.dll",
 	})
